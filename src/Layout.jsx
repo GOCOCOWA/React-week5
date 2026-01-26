@@ -5,17 +5,17 @@ const Layout = () => {
     <div>
       <header className="d-flex">
         <nav className="m-5 ">
-          <Link className="fs-2" to="/">
+          <Link className="fs-2 text-decoration-none text-black" to="/">
             首頁
           </Link>
         </nav>
         <nav className="m-5 ">
-          <Link className="fs-2" to="/products">
+          <Link className="fs-2 text-decoration-none text-black" to="/products">
             產品
           </Link>
         </nav>
         <nav className="m-5 ">
-          <Link className="fs-2" to="/cart">
+          <Link className="fs-2 text-decoration-none text-black" to="/cart">
             購物車
           </Link>
         </nav>
@@ -24,7 +24,7 @@ const Layout = () => {
         <Outlet />
       </main>
       <footer className="my-3 text-center">
-        <h2>6666有限公司</h2>
+        <h2 className="fw-bold">Game有限公司</h2>
       </footer>
     </div>
   );

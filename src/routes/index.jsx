@@ -1,8 +1,12 @@
 import Home from "../pages/Home";
 import Products from "../pages/products";
-import Layout from "../Layout";
 import Cart from "../pages/Cart";
+import NotFound from "../pages/NotFound";
+import Product from "../pages/Product";
 
+
+
+import Layout from "../Layout";
 
 
 
@@ -24,10 +28,19 @@ const routes=[
                 path:'/cart',
                 element:<Cart/>
             },
+            {
+                path:'product/:id',
+                element:<Product/>
+            },
 
         ]
 
     },
+    {
+        path:'*',
+        element:<NotFound/>
+
+    }
     
 ]
 
