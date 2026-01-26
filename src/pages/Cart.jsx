@@ -19,7 +19,7 @@ const Cart=()=>{
             console.log(err.response.data);
         }
     }
-    getCart()
+    
     const deleteCart=async(id)=>{
         try{
             await axios.delete(`${VITE_URL}/v2/api/${VITE_PATH}/cart/${id}`);
@@ -32,7 +32,7 @@ const Cart=()=>{
         
     }
 
-    const deleteCartAll=async(id)=>{
+    const deleteCartAll=async()=>{
         try{
             await axios.delete(`${VITE_URL}/v2/api/${VITE_PATH}/carts`);
             getCart();
@@ -68,7 +68,7 @@ const Cart=()=>{
 
    return (
     <div className="container mt-4">
-      <div className="text-end">
+      <div>
         <button className="btn btn-outline-danger" type="button" onClick={deleteCartAll}>
           清空購物車
         </button>
@@ -94,12 +94,12 @@ const Cart=()=>{
                 <td>{item.product.title}</td>
                 <td>
                   <div className="input-group input-group-sm">
-                    <input type="number" className="form-control" min="1" defaultValue={item.qty} key={item.qty}  onChange={(e) => updateCart(item.id, Number(e.target.value))}/>
-                    <div className="input-group-text">/{item.product.unit}</div>
+                    <input  type="number" className="form-control" min="1" value={item.qty} onChange={(e) => updateCart(item.id, Number(e.target.value))} />
+                    <div className="input-group-text">{item.product.unit}</div>
                   </div>
                 </td>
-                <td className="text-end">
-                  {item.final_total !== item.total && <small className="text-success">折扣價：</small>}
+                <td>
+                  {/* {item.final_total !== item.total && <small className="text-success">折扣價：</small>} */}
                   {currency(item.final_total)}
                 </td>
               </tr>
@@ -110,9 +110,9 @@ const Cart=()=>{
             <td colSpan="3" className="text-end">
               總計
             </td>
-            <td className="text-end">{currency(cart?.total)}</td>
+            <td>{currency(cart?.total)}</td>
           </tr>
-          {cart?.final_total !== cart?.total ? (
+          {/* {cart?.final_total !== cart?.total ? (
             <tr>
               <td colSpan="3" className="text-end text-success">
                 折扣價
@@ -121,7 +121,7 @@ const Cart=()=>{
             </tr>
           ) : (
             ""
-          )}
+          )} */}
         </tfoot>
       </table>
     </div>
