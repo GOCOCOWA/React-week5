@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { RotatingLines } from "react-loader-spinner";
+//import { RotatingLines } from "react-loader-spinner";
 import { useForm } from "react-hook-form";
 
 import axios from "axios";
@@ -28,44 +28,41 @@ function Checkout() {
     reset,
   } = useForm();
 
-  // 取得全部產品
+ 
   const getProducts = async (page = 1) => {
     try {
-      const url = `${VITE_URL}/v2/api/${VITE_PATH}/products?page=${page}`;
-      const response = await axios.get(url);
+      const response = await axios.get( `${VITE_URL}/v2/api/${VITE_PATH}/products?page=${page}`);
       setProducts(response.data.products);
       setPagination(response.data.pagination);
-    } catch (error) {
-      console.log(error.response.data);
+    } catch (err) {
+      console.log(err.response.data);
     }
   };
 
-  // 取得單一產品
+
   const getProduct = async (id) => {
     setLoadingProductId(id);
     try {
-      const url = `${VITE_URL}/v2/api/${VITE_PATH}/product/${id}`;
-      const response = await axios.get(url);
+      const response = await axios.get(`${VITE_URL}/v2/api/${VITE_PATH}/product/${id}`);
       setProduct(response.data.product);
-    } catch (error) {
-      console.log(error.response.data);
+    } catch (err) {
+      console.log(err.response.data);
     } finally {
       setLoadingProductId(null);
     }
   };
 
-  // 取得購物車列表
+  //購物車
   const getCart = async () => {
     try {
-      const url = `${VITE_URL}/v2/api/${VITE_PATH}/cart`;
-      const response = await axios.get(url);
+      const response = await axios.get(`${VITE_URL}/v2/api/${VITE_PATH}/cart`);
       setCart(response.data.data);
-    } catch (error) {
-      console.log(error.response.data);
+    } catch (err) {
+      console.log(err.response.data);
     }
   };
 
-  // 加入購物車
+ 
   const addCart = async (id, num) => {
     setLoadingCartId(id);
     const data = {
@@ -73,67 +70,62 @@ function Checkout() {
       qty: num,
     };
     try {
-      const url = `${VITE_URL}/v2/api/${VITE_PATH}/cart`;
-      await axios.post(url, { data });
+      await axios.post( `${VITE_URL}/v2/api/${VITE_PATH}/cart`, { data });
       getCart();
-    } catch (error) {
-      console.log(error.response.data);
+    } catch (err) {
+      console.log(err.response.data);
     } finally {
       setLoadingCartId(null);
       productModalRef.current.hide();
     }
   };
 
-  // 清除單一筆購物車
+  
   const deleteCart = async (id) => {
     try {
-      const url = `${VITE_URL}/v2/api/${VITE_PATH}/cart/${id}`;
-      await axios.delete(url);
+      await axios.delete(`${VITE_URL}/v2/api/${VITE_PATH}/cart/${id}`);
       getCart();
-    } catch (error) {
-      console.log(error.response.data);
+    } catch (err) {
+      console.log(err.response.data);
     }
   };
 
-  // 清空購物車
+ 
   const deleteCartAll = async () => {
     try {
-      const url = `${VITE_URL}/v2/api/${VITE_PATH}/carts`;
-      await axios.delete(url);
+      await axios.delete(`${VITE_URL}/v2/api/${VITE_PATH}/carts`);
       getCart();
-    } catch (error) {
-      console.log(error.response.data);
+    } catch (err) {
+      console.log(err.response.data);
     }
   };
 
-  // 更新商品數量
+ 
   const updateCart = async (cartId, productId, qty = 1) => {
     try {
-      const url = `${VITE_URL}/v2/api/${VITE_PATH}/cart/${cartId}`;
 
       const data = {
         product_id: productId,
         qty,
       };
-      await axios.put(url, { data });
+      await axios.put(`${VITE_URL}/v2/api/${VITE_PATH}/cart/${cartId}`, { data });
       getCart();
-    } catch (error) {
-      console.log(error.response.data);
+    } catch (err) {
+      console.log(err.response.data);
     }
   };
 
   const onSubmit = async (data) => {
       try {
-        const url = `${VITE_URL}/v2/api/${VITE_PATH}/order`;
         if(!cart.carts.length) {
           alert("購物車沒有商品！");
           return;
         }
-        await axios.post(url, { data: { user: data, message: data.message } });
+        await axios.post(`${VITE_URL}/v2/api/${VITE_PATH}/order`, { data: { user: data, message: data.message } });
         reset();
         getCart();
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        console.err(err);
       }
   };
 
@@ -311,6 +303,47 @@ function Checkout() {
       </table>
     </div>
   </div>
+   {/* 分頁 */}
+      <nav aria-label="Page navigation example">
+        <ul className="pagination">
+          <li className="page-item">
+            <a
+              href="/"
+              className={`page-link ${pagination.has_pre ? "" : "disabled"}`}
+              onClick={(event) =>
+                handleClick(event, pagination.current_page - 1)
+              }
+            >
+              <span>&laquo;</span>
+            </a>
+          </li>
+          {[...new Array(pagination.total_pages)].map((_, i) => (
+            <li className="page-item" key={`${i}_page`}>
+              <a
+                className={`page-link ${
+                  i + 1 === pagination.current_page && "active"
+                }`}
+                href="/"
+                onClick={(event) => handleClick(event, i + 1)}
+              >
+                {i + 1}
+              </a>
+            </li>
+          ))}
+          <li className="page-item">
+            <a
+              className={`page-link ${pagination.has_next ? "" : "disabled"}`}
+              onClick={(event) =>
+                handleClick(event, pagination.current_page + 1)
+              }
+              href="/"
+          
+            >
+              <span >&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
 
   {/* 購物車 */}
   <div className="card shadow-sm mb-5">
