@@ -19,6 +19,11 @@ const Layout = () => {
             購物車
           </Link>
         </nav>
+         <nav className="m-5 ">
+          <Link className="fs-2 text-decoration-none text-black" to="/login">
+            登入
+          </Link>
+        </nav>
       </header>
       <main>
         <Outlet />

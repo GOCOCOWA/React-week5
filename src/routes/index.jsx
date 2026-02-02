@@ -3,7 +3,10 @@ import Products from "../pages/products";
 import Cart from "../pages/Cart";
 import NotFound from "../pages/NotFound";
 import Product from "../pages/Product";
+import Login from "../pages/Login";
 
+import Dashboard from "../Dashboard/Dsahbaord";
+import DashboardProducts from "../Dashboard/DashboardProducts";
 
 
 import Layout from "../Layout";
@@ -16,7 +19,7 @@ const routes=[
         element:<Layout/>,
         children:[
             {
-                path:'/',
+                index:true,
                 element:<Home/>
 
             },
@@ -32,13 +35,28 @@ const routes=[
                 path:'product/:id',
                 element:<Product/>
             },
+            {
+                path:'login',
+                element:<Login/>
+            },
+            {
+                path:'*',
+                element:<NotFound/>
+            }
 
         ]
 
     },
     {
-        path:'*',
-        element:<NotFound/>
+        path:'dashboard',
+        element:<Dashboard/>,
+        children:[
+            {
+                path:'products',
+                element:<DashboardProducts/>
+            }
+        ]
+
 
     }
     
