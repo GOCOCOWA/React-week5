@@ -31,9 +31,9 @@ function Checkout() {
  
   const getProducts = async (page = 1) => {
     try {
-      const response = await axios.get( `${VITE_URL}/v2/api/${VITE_PATH}/products?page=${page}`);
-      setProducts(response.data.products);
-      setPagination(response.data.pagination);
+      const res = await axios.get( `${VITE_URL}/v2/api/${VITE_PATH}/products?page=${page}`);
+      setProducts(res.data.products);
+      setPagination(res.data.pagination);
     } catch (err) {
       console.log(err.response.data);
     }
@@ -43,8 +43,8 @@ function Checkout() {
   const getProduct = async (id) => {
     setLoadingProductId(id);
     try {
-      const response = await axios.get(`${VITE_URL}/v2/api/${VITE_PATH}/product/${id}`);
-      setProduct(response.data.product);
+      const res = await axios.get(`${VITE_URL}/v2/api/${VITE_PATH}/product/${id}`);
+      setProduct(res.data.product);
     } catch (err) {
       console.log(err.response.data);
     } finally {
@@ -55,8 +55,9 @@ function Checkout() {
   //購物車
   const getCart = async () => {
     try {
-      const response = await axios.get(`${VITE_URL}/v2/api/${VITE_PATH}/cart`);
-      setCart(response.data.data);
+      const res = await axios.get(`${VITE_URL}/v2/api/${VITE_PATH}/cart`);
+      console.log(res)
+      setCart(res.data.data);
     } catch (err) {
       console.log(err.response.data);
     }
@@ -70,13 +71,14 @@ function Checkout() {
       qty: num,
     };
     try {
-      await axios.post( `${VITE_URL}/v2/api/${VITE_PATH}/cart`, { data });
+      const res=await axios.post( `${VITE_URL}/v2/api/${VITE_PATH}/cart`, { data });
       getCart();
     } catch (err) {
       console.log(err.response.data);
     } finally {
       setLoadingCartId(null);
       productModalRef.current.hide();
+      
     }
   };
 
@@ -375,7 +377,7 @@ function Checkout() {
                   type="number"
                   className="form-control form-control-sm"
                   min="1"
-                  defaultValue={item.qty}
+                  value={item.qty}
                   onChange={(e) =>
                     updateCart(item.id, item.product_id, Number(e.target.value))
                   }
